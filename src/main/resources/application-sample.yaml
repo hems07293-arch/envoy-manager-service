@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: envoy-manager-service
+  datasource:
+    url:
+    username:
+    password:
