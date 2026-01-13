@@ -14,14 +14,18 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 public class KafkaConfig {
 
-    private String topic;
+    private String rawEnergyTopic;
+    private Integer partitionCount;
+    private Integer replicaCount;
 
     @Bean
     public NewTopic getTopic() {
-        log.info("Topic name from env = " + topic);
-        return TopicBuilder.name(topic)
-                .partitions(10)
-                .replicas(1)
+        log.trace("topic name from env = " + rawEnergyTopic);
+        log.trace("partition count from env = " + partitionCount);
+        log.trace("replica count from env = " + replicaCount);
+        return TopicBuilder.name(rawEnergyTopic)
+                .partitions(partitionCount)
+                .replicas(replicaCount)
                 .build();
     }
 
