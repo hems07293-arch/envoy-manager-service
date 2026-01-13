@@ -15,15 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaConfig {
 
     private String rawEnergyTopic;
+    private String energyDispatchTopic;
     private Integer partitionCount;
     private Integer replicaCount;
 
     @Bean
-    public NewTopic getTopic() {
-        log.trace("topic name from env = " + rawEnergyTopic);
-        log.trace("partition count from env = " + partitionCount);
-        log.trace("replica count from env = " + replicaCount);
+    public NewTopic rawEnergyReadings() {
         return TopicBuilder.name(rawEnergyTopic)
+                .partitions(partitionCount)
+                .replicas(replicaCount)
+                .build();
+    }
+
+    @Bean
+    public NewTopic energyDispatchCommands() {
+        return TopicBuilder.name(energyDispatchTopic)
                 .partitions(partitionCount)
                 .replicas(replicaCount)
                 .build();

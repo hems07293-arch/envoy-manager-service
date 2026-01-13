@@ -9,11 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class KafkaService {
+public class RawEnergyEventConsumer {
 
-    @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId = "${spring.kafka.consumer.group-id}")
+    // @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId
+    // = "${spring.kafka.consumer.group-id}")
     public void listen(MeterSnapshot meterSnapshot) {
-        log.info("KafkaService: received the simulation info = " + meterSnapshot);
+        log.info("RawEnergyEventConsumer: received the simulation info = " + meterSnapshot);
         System.out.println("Meter Snapshot got from simulator service = " + meterSnapshot);
     }
 }
