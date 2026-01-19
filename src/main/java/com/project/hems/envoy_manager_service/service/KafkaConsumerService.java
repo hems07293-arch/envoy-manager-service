@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.project.hems.envoy_manager_service.model.SiteControlCommand;
 import com.project.hems.envoy_manager_service.model.dispatch.DispatchEvent;
 import com.project.hems.envoy_manager_service.model.simulator.MeterSnapshot;
+import com.project.hems.envoy_manager_service.model.site.SiteCreationEvent;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -22,9 +23,12 @@ public class KafkaConsumerService {
 
     private String rawEnergyTopic;
     private String dispatchEnergyTopic;
+    private String siteCreationTopic;
+
     private final MeterAggregationService meterAggregationService;
     private final CommandTranslatorService commandTranslatorService;
     private final SimulationConnectorService connectorService;
+    private final MeterCreationService meterCreationService;
     // private final SimpMessagingTemplate webSocket; // For UI Live Stream
 
     @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId = "${spring.kafka.consumer.raw-energy-group-id}")
@@ -50,6 +54,13 @@ public class KafkaConsumerService {
         SiteControlCommand siteControlCommand = commandTranslatorService.translateDispatchEvent(dispatchEvent);
 
         connectorService.applyControlToSimulation(siteControlCommand);
+    }
+
+    @KafkaListener(topics = "${property.config.kafka.site-creation-topic}", groupId = "${property.config.kafka.site-creation-group-id}")
+    public void consumeSiteCreationEvents(SiteCreationEvent siteCreationEvent) {
+        log.info("consumeSiteCreationEvents: consuming all site creation events from site manager with topic = "
+                + siteCreationTopic);
+        meterCreationService.createMeter(siteCreationEvent.getSiteId(), siteCreationEvent.getBatteryCapacityW());
     }
 
 }
