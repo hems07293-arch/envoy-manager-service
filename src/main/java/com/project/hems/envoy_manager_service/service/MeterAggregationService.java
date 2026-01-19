@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.project.hems.envoy_manager_service.domain.MeterHistory;
 import com.project.hems.envoy_manager_service.model.simulator.MeterSnapshot;
 import com.project.hems.envoy_manager_service.repository.MeterHistoryRepository;
+import com.project.hems.envoy_manager_service.web.controller.LiveStreamController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MeterAggregationService {
 
     private final MeterHistoryRepository repository;
+    private final LiveStreamController liveStreamController;
 
     // TODO: implement redis over here instead of this map
     // Temporary Buffer: Map<MeterId, List<RawReadings>>
@@ -63,7 +65,10 @@ public class MeterAggregationService {
                     bucket.size());
 
             // 3. AGGREGATE & SAVE
-            saveAggregate(rawData.getMeterId(), rawData.getSiteId(), bucket);
+            MeterHistory savedAggregate = saveAggregate(rawData.getMeterId(), rawData.getSiteId(), bucket);
+
+            // send the raw data to UI using web socket
+            liveStreamController.pushDashboardUpdate(rawData, savedAggregate);
 
             // 4. CLEAR BUFFER
             bucket.clear();
@@ -71,7 +76,7 @@ public class MeterAggregationService {
         }
     }
 
-    private void saveAggregate(Long meterId, Long siteId, List<MeterSnapshot> bucket) {
+    private MeterHistory saveAggregate(Long meterId, Long siteId, List<MeterSnapshot> bucket) {
         log.debug(
                 "saveAggregate: invoked for meterId = {}, siteId = {}, bucketSize = {}",
                 meterId,
@@ -80,7 +85,7 @@ public class MeterAggregationService {
 
         if (bucket.isEmpty()) {
             log.debug("saveAggregate: bucket is empty, skipping aggregation");
-            return;
+            return new MeterHistory();
         }
 
         // 1. Calculate AVERAGES for Instant Power (Watts)
@@ -160,6 +165,7 @@ public class MeterAggregationService {
                 "saveAggregate: aggregated and saved {} records for meterId = {}",
                 bucket.size(),
                 meterId);
+        return history;
     }
 
 }
