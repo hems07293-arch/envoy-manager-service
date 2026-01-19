@@ -6,6 +6,10 @@ spring:
     url: jdbc:mysql://localhost:3306/envoy_service
     username:   
     password: 
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
   kafka:
     producer:
@@ -25,20 +29,24 @@ spring:
     properties:
       # Ignore the type info sent by the producer
       spring.json.use.type.headers: false
-      spring/.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+      spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
       spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
       # Ensure the package is trusted
       spring.json.trusted.packages: "*"
-      spring.json.type.mapping: "com.project.hems.simulator_service_testing.model.MeterSnapshot:com.project.hems.envoy_manager_service.model.MeterSnapshot"
+      spring.json.type.mapping: "com.project.hems.simulator_service_testing.model.MeterSnapshot:com.project.hems.envoy_manager_service.model.simulator.MeterSnapshot"
       # Specify the local class to always use for this consumer
-      spring.json.value.default.type: com.project.hems.envoy_manager_service.model.MeterSnapshot
+      spring.json.value.default.type: com.project.hems.envoy_manager_service.model.simulator.MeterSnapshot
 
 server:
   port: 8081
 
 property:
   config:
+    meter-history:
+      batch_size: 60
     kafka: 
+      raw-energy-group-id: raw-energy-readers
+      
       raw-energy-topic: RAW_ENERGY_READINGS
       energy-dispatch-topic: ENERGY_DISPATCH_COMMANDS
       partition-count: 3
