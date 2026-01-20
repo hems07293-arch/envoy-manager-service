@@ -25,13 +25,12 @@ public class KafkaConsumerService {
     private String dispatchEnergyTopic;
     private String siteCreationTopic;
 
-    private final MeterAggregationService meterAggregationService;
     private final CommandTranslatorService commandTranslatorService;
     private final SimulationConnectorService connectorService;
     private final MeterCreationService meterCreationService;
     // private final SimpMessagingTemplate webSocket; // For UI Live Stream
 
-    @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId = "${spring.kafka.consumer.raw-energy-group-id}")
+    @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId = "${property.config.kafka.raw-energy-group-id}")
     public void consumeRawMeterReadings(MeterSnapshot meterSnapshot) {
         log.info("consumeRawMeterReadings: consuming raw meter reading data from kafka with topic = " + rawEnergyTopic);
 
@@ -41,8 +40,9 @@ public class KafkaConsumerService {
         // meterSnapshot);
 
         // Send to aggregator to wait for batching
-        log.debug("consumeRawMeterReadings: send raw data for processing to aggregator" + meterSnapshot);
-        meterAggregationService.process(meterSnapshot);
+        // log.debug("consumeRawMeterReadings: send raw data for processing to
+        // aggregator" + meterSnapshot);
+        // meterAggregationService.process(meterSnapshot);
     }
 
     @KafkaListener(topics = "${property.config.kafka.dispatch-energy-topic}", groupId = "${property.config.kafka.dispatch-energy-group-id}")
@@ -60,7 +60,8 @@ public class KafkaConsumerService {
     public void consumeSiteCreationEvents(SiteCreationEvent siteCreationEvent) {
         log.info("consumeSiteCreationEvents: consuming all site creation events from site manager with topic = "
                 + siteCreationTopic);
-        meterCreationService.createMeter(siteCreationEvent.getSiteId(), siteCreationEvent.getBatteryCapacityW());
+        meterCreationService.createMeter(siteCreationEvent.getSiteId(),
+                siteCreationEvent.getBatteryCapacityW());
     }
 
 }
