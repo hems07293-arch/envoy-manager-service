@@ -1,8 +1,11 @@
 package com.project.hems.envoy_manager_service.service;
 
 import java.time.Instant;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
+import com.project.hems.envoy_manager_service.domain.MeterHistory;
 import com.project.hems.envoy_manager_service.model.BatteryControl;
 import com.project.hems.envoy_manager_service.model.GridControl;
 import com.project.hems.envoy_manager_service.model.GridControl.GridControlBuilder;
@@ -14,13 +17,15 @@ import com.project.hems.envoy_manager_service.model.dispatch.DispatchEventType;
 import com.project.hems.envoy_manager_service.model.simulator.BatteryMode;
 import com.project.hems.envoy_manager_service.repository.MeterHistoryRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CommandTranslatorService {
 
-    private MeterHistoryRepository meterHistoryRepository;
+    private final MeterHistoryRepository meterHistoryRepository;
 
     public SiteControlCommand translateDispatchEvent(DispatchEvent dispatchEvent) {
 
@@ -29,11 +34,14 @@ public class CommandTranslatorService {
         commandBuilder.dispatchId(dispatchEvent.getDispatchId());
         commandBuilder.siteId(dispatchEvent.getSiteId());
 
-        Long meterId = meterHistoryRepository
-                .findTopBySiteIdOrderByTimestampDesc(dispatchEvent.getSiteId())
-                .orElse(null)
-                .getMeterId();
-        commandBuilder.meterId(meterId);
+        Optional<MeterHistory> meterHistoryOptional = meterHistoryRepository
+                .findTopBySiteIdOrderByTimestampDesc(dispatchEvent.getSiteId());
+
+        meterHistoryOptional.ifPresentOrElse(meterHistory -> {
+            commandBuilder.meterId(meterHistory.getMeterId());
+        }, () -> {
+            log.error("translateDispatchEvent: got null mete history");
+        });
 
         // 2. Calculate Expiry (validUntil = Now + durationSec)
         commandBuilder.timestamp(Instant.now());

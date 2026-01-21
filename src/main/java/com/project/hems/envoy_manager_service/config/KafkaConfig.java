@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaConfig {
 
     private String rawEnergyTopic;
-    private String energyDispatchTopic;
+    private String dispatchEnergyTopic;
     private Integer rawEnergypartitionCount;
     private Integer dispatchEnergypartitionCount;
     private Integer replicaCount;
@@ -30,7 +30,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic energyDispatchCommands() {
-        return TopicBuilder.name(energyDispatchTopic)
+        return TopicBuilder.name(dispatchEnergyTopic)
                 .partitions(dispatchEnergypartitionCount)
                 .replicas(replicaCount)
                 .build();

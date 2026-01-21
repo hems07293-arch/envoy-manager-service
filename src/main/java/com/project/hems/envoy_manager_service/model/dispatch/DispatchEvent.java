@@ -4,19 +4,43 @@ import java.util.Set;
 
 import com.project.hems.envoy_manager_service.model.EnergyPriority;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DispatchEvent {
+
+    @NotNull(message = "dispatchId cannot be null")
     private Long dispatchId;
+
+    @NotNull(message = "siteId cannot be null")
     private Long siteId;
+
+    @NotNull(message = "eventType cannot be null")
     private DispatchEventType eventType;
+
+    @NotNull(message = "powerReqW cannot be null")
+    @Positive(message = "powerReqW must be greater than 0")
     private Long powerReqW;
+
+    @NotNull(message = "durationSec cannot be null")
+    @Positive(message = "durationSec must be greater than 0")
     private Long durationSec;
-    private Set<EnergyPriority> energyPriority;
+
+    @NotEmpty(message = "energyPriority cannot be empty")
+    private Set<@NotNull EnergyPriority> energyPriority;
+
+    @Size(min = 1, max = 255, message = "reason must be at most 255 characters")
     private String reason;
 }
