@@ -1,7 +1,6 @@
 package com.project.hems.envoy_manager_service.model.dispatch;
 
-import java.util.Set;
-
+import java.util.List;
 import com.project.hems.envoy_manager_service.model.EnergyPriority;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -39,7 +38,7 @@ public class DispatchEvent {
     private Long durationSec;
 
     @NotEmpty(message = "energyPriority cannot be empty")
-    private Set<@NotNull EnergyPriority> energyPriority;
+    private List<@NotNull EnergyPriority> energyPriority;
 
     @Size(min = 1, max = 255, message = "reason must be at most 255 characters")
     private String reason;

@@ -40,7 +40,7 @@ public class CommandTranslatorService {
         meterHistoryOptional.ifPresentOrElse(meterHistory -> {
             commandBuilder.meterId(meterHistory.getMeterId());
         }, () -> {
-            log.error("translateDispatchEvent: got null mete history");
+            log.error("translateDispatchEvent: required meter history not found in db");
         });
 
         // 2. Calculate Expiry (validUntil = Now + durationSec)

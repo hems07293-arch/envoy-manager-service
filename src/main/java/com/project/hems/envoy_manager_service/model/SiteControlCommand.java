@@ -1,8 +1,7 @@
 package com.project.hems.envoy_manager_service.model;
 
 import java.time.Instant;
-import java.util.Set;
-
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Builder;
@@ -22,7 +21,7 @@ public class SiteControlCommand {
     private Instant timestamp;
     private Instant validUntil;
 
-    private Set<EnergyPriority> energyPriority;
+    private List<EnergyPriority> energyPriority;
 
     private BatteryControl batteryControl;
 
