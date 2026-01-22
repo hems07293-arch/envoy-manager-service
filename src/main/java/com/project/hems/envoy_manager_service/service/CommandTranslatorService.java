@@ -104,6 +104,7 @@ public class CommandTranslatorService {
                 break;
         }
 
+        batteryControlBuilder.targetPowerW(dispatchEvent.getPowerReqW());
         commandBuilder.batteryControl(batteryControlBuilder.build());
         commandBuilder.gridControl(gridControlBuilder.build());
 

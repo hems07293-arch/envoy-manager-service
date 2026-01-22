@@ -11,6 +11,7 @@ import lombok.ToString;
 @Builder
 public class BatteryControl {
     private BatteryMode mode;
+    private Long targetPowerW;
     private Long maxChargeW;
     private Long maxDischargeW;
     private Double minSocPercent;
