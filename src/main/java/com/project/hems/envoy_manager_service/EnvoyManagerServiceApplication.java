@@ -2,12 +2,14 @@ package com.project.hems.envoy_manager_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.project.hems.envoy_manager_service")
+@ConfigurationPropertiesScan
 public class EnvoyManagerServiceApplication {
 
 	public static void main(String[] args) {

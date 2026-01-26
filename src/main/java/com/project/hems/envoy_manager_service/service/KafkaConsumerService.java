@@ -1,8 +1,6 @@
 package com.project.hems.envoy_manager_service.service;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.kafka.annotation.KafkaListener;
-// import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.project.hems.envoy_manager_service.model.SiteControlCommand;
@@ -11,25 +9,26 @@ import com.project.hems.envoy_manager_service.model.simulator.MeterSnapshot;
 import com.project.hems.envoy_manager_service.model.site.SiteCreationEvent;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Setter
-@ConfigurationProperties(prefix = "property.config.kafka")
 public class KafkaConsumerService {
 
+<<<<<<< Updated upstream
     private String rawEnergyTopic;
     private String dispatchEnergyTopic;
     private String siteCreationTopic;
 
+=======
+    private final MeterAggregationService meterAggregationService;
+>>>>>>> Stashed changes
     private final CommandTranslatorService commandTranslatorService;
     private final SimulationConnectorService connectorService;
     private final MeterCreationService meterCreationService;
-    // private final SimpMessagingTemplate webSocket; // For UI Live Stream
 
+<<<<<<< Updated upstream
     @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId = "${property.config.kafka.raw-energy-group-id}")
     public void consumeRawMeterReadings(MeterSnapshot meterSnapshot) {
 
@@ -51,10 +50,23 @@ public class KafkaConsumerService {
         // log.debug("consumeRawMeterReadings: forwarding raw snapshot to aggregation
         // service");
         // meterAggregationService.process(meterSnapshot);
+=======
+    @KafkaListener(
+            topics = "${property.config.kafka.raw-energy-topic}",
+            groupId = "${property.config.kafka.raw-energy-group-id}"
+    )
+    public void consumeRawMeterReadings(MeterSnapshot meterSnapshot) {
+        log.info("consumeRawMeterReadings: consuming raw meter reading data");
+        meterAggregationService.process(meterSnapshot);
+>>>>>>> Stashed changes
     }
 
-    @KafkaListener(topics = "${property.config.kafka.dispatch-energy-topic}", groupId = "${property.config.kafka.dispatch-energy-group-id}")
+    @KafkaListener(
+            topics = "${property.config.kafka.dispatch-energy-topic}",
+            groupId = "${property.config.kafka.dispatch-energy-group-id}"
+    )
     public void consumeDispatchEvents(DispatchEvent dispatchEvent) {
+<<<<<<< Updated upstream
 
         log.info(
                 "consumeDispatchEvents: received dispatch command from topic={} dispatchId={} siteId={} eventType={}",
@@ -74,6 +86,11 @@ public class KafkaConsumerService {
                 dispatchEvent.getSiteId(),
                 siteControlCommand);
 
+=======
+        log.info("consumeDispatchEvents: consuming energy dispatch command");
+        SiteControlCommand siteControlCommand =
+                commandTranslatorService.translateDispatchEvent(dispatchEvent);
+>>>>>>> Stashed changes
         connectorService.applyControlToSimulation(siteControlCommand);
 
         log.info(
@@ -81,6 +98,7 @@ public class KafkaConsumerService {
                 dispatchEvent.getSiteId());
     }
 
+<<<<<<< Updated upstream
     @KafkaListener(topics = "${property.config.kafka.site-creation-topic}", groupId = "${property.config.kafka.site-creation-group-id}")
     public void consumeSiteCreationEvents(SiteCreationEvent siteCreationEvent) {
 
@@ -103,4 +121,17 @@ public class KafkaConsumerService {
                 siteCreationEvent.getSiteId());
     }
 
+=======
+//    @KafkaListener(
+//            topics = "${property.config.kafka.site-creation-topic}",
+//            groupId = "${property.config.kafka.site-creation-group-id}"
+//    )
+//    public void consumeSiteCreationEvents(SiteCreationEvent siteCreationEvent) {
+//        log.info("consumeSiteCreationEvents: consuming site creation event");
+//        meterCreationService.createMeter(
+//                siteCreationEvent.getSiteId(),
+//                siteCreationEvent.getBatteryCapacityW()
+//        );
+//    }
+>>>>>>> Stashed changes
 }
