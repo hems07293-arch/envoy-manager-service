@@ -1,6 +1,8 @@
 package com.project.hems.envoy_manager_service.model.dispatch;
 
 import java.util.List;
+import java.util.UUID;
+
 import com.project.hems.envoy_manager_service.model.EnergyPriority;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -24,7 +26,7 @@ public class DispatchEvent {
     private Long dispatchId;
 
     @NotNull(message = "siteId cannot be null")
-    private Long siteId;
+    private UUID siteId;
 
     @NotNull(message = "eventType cannot be null")
     private DispatchEventType eventType;

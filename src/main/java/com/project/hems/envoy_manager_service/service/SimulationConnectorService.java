@@ -1,5 +1,7 @@
 package com.project.hems.envoy_manager_service.service;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.project.hems.envoy_manager_service.model.SiteControlCommand;
@@ -14,7 +16,7 @@ public class SimulationConnectorService {
     private final SimulatorFeignClientService simulatorFeignClientService;
 
     public void applyControlToSimulation(SiteControlCommand command) {
-        Long siteId = command.getSiteId();
+        UUID siteId = command.getSiteId();
 
         try {
             log.info("Applying Dispatch Control to Meter {}", siteId);

@@ -1,5 +1,7 @@
 package com.project.hems.envoy_manager_service.service;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -12,7 +14,7 @@ public class MeterCreationService {
 
     private final SimulatorFeignClientService feignClientService;
 
-    public void createMeter(Long siteId, Double batteryCapacityW) {
+    public void createMeter(UUID siteId, Double batteryCapacityW) {
         feignClientService.activateMeterData(siteId, batteryCapacityW);
     }
 }

@@ -2,6 +2,8 @@ package com.project.hems.envoy_manager_service.model;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Builder;
@@ -15,7 +17,7 @@ import lombok.ToString;
 public class SiteControlCommand {
 
     private Long dispatchId;
-    private Long siteId;
+    private UUID siteId;
     private Long meterId;
 
     private Instant timestamp;

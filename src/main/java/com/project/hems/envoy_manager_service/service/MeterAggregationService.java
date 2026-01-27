@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import com.project.hems.envoy_manager_service.domain.MeterHistory;
 import com.project.hems.envoy_manager_service.model.simulator.MeterSnapshot;
 import com.project.hems.envoy_manager_service.repository.MeterHistoryRepository;
@@ -20,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @Setter
-@ConfigurationProperties(prefix = "property.config.meter-history")
 public class MeterAggregationService {
 
         private final MeterHistoryRepository repository;
@@ -29,6 +29,7 @@ public class MeterAggregationService {
         private final Map<Long, List<MeterSnapshot>> memoryBuffer = new ConcurrentHashMap<>();
 
         // Config: Aggregate every BATCH_SIZE readings
+        @Value("${property.config.meter-history.batch_size}")
         private int BATCH_SIZE;
 
         public void process(MeterSnapshot rawData) {
@@ -69,7 +70,7 @@ public class MeterAggregationService {
                 }
         }
 
-        private void saveAggregate(Long meterId, Long siteId, List<MeterSnapshot> bucket) {
+        private void saveAggregate(Long meterId, UUID siteId, List<MeterSnapshot> bucket) {
                 log.debug(
                                 "saveAggregate: invoked for meterId = {}, siteId = {}, bucketSize = {}",
                                 meterId,
