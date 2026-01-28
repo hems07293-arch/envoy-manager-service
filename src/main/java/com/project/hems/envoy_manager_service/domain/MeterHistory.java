@@ -1,6 +1,7 @@
 package com.project.hems.envoy_manager_service.domain;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +28,7 @@ public class MeterHistory {
     @Column(nullable = false)
     private Long meterId;
     @Column(nullable = false)
-    private Long siteId;
+    private UUID siteId;
     private LocalDateTime timestamp; // The start time of this 15-min bucket
 
     // --- AVERAGES (For Power Graphs) ---
