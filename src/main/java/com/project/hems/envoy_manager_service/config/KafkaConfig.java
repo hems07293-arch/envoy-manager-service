@@ -27,7 +27,7 @@ public class KafkaConfig {
     public NewTopic rawEnergyReadings() {
         log.info("Creating Kafka topic {}", rawEnergyTopic);
         return TopicBuilder.name(rawEnergyTopic)
-                .partitions(rawEnergyPartitionCount)
+                .partitions(rawEnergypartitionCount)
                 .replicas(replicaCount)
                 .build();
     }
@@ -36,13 +36,13 @@ public class KafkaConfig {
     public NewTopic energyDispatchCommands() {
         log.info("Creating Kafka topic {}", dispatchEnergyTopic);
         return TopicBuilder.name(dispatchEnergyTopic)
-                .partitions(dispatchEnergyPartitionCount)
+                .partitions(dispatchEnergypartitionCount)
                 .replicas(replicaCount)
                 .build();
     }
 
     @Bean
-    public NewTopic siteCreationTopic(){
+    public NewTopic siteCreationTopic() {
         return TopicBuilder.name(siteCreationTopic)
                 .partitions(siteCreationpartitionCount)
                 .replicas(replicaCount)
