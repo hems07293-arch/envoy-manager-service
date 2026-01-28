@@ -30,7 +30,11 @@ public class KafkaConsumerService {
     private final MeterCreationService meterCreationService;
     // private final SimpMessagingTemplate webSocket; // For UI Live Stream
 
-    @KafkaListener(topics = "${property.config.kafka.raw-energy-topic}", groupId = "${property.config.kafka.raw-energy-group-id}")
+    @KafkaListener(
+            topics = "${property.config.kafka.raw-energy-topic}",
+            groupId = "${property.config.kafka.raw-energy-group-id}",
+            containerFactory = "meterSnapshotKafkaListenerFactory"
+    )
     public void consumeRawMeterReadings(MeterSnapshot meterSnapshot) {
 
         log.info(
@@ -81,7 +85,11 @@ public class KafkaConsumerService {
                 dispatchEvent.getSiteId());
     }
 
-    @KafkaListener(topics = "${property.config.kafka.site-creation-topic}", groupId = "${property.config.kafka.site-creation-group-id}")
+    @KafkaListener(
+            topics = "${property.config.kafka.site-creation-topic}",
+            groupId = "${property.config.kafka.site-creation-group-id}",
+            containerFactory = "siteCreationKafkaListenerFactory"
+    )
     public void consumeSiteCreationEvents(SiteCreationEvent siteCreationEvent) {
 
         log.info(

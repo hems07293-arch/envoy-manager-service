@@ -16,8 +16,10 @@ public class KafkaConfig {
 
     private String rawEnergyTopic;
     private String dispatchEnergyTopic;
+    private String siteCreationTopic;
     private Integer rawEnergypartitionCount;
     private Integer dispatchEnergypartitionCount;
+    private Integer siteCreationpartitionCount;
     private Integer replicaCount;
 
     @Bean
@@ -32,6 +34,14 @@ public class KafkaConfig {
     public NewTopic energyDispatchCommands() {
         return TopicBuilder.name(dispatchEnergyTopic)
                 .partitions(dispatchEnergypartitionCount)
+                .replicas(replicaCount)
+                .build();
+    }
+
+    @Bean
+    public NewTopic siteCreationTopic(){
+        return TopicBuilder.name(siteCreationTopic)
+                .partitions(siteCreationpartitionCount)
                 .replicas(replicaCount)
                 .build();
     }
